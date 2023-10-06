@@ -221,7 +221,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          margin: EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
                           height: MediaQuery.of(context).size.height * 0.08,
                           child: Text(
                             _displayText,
@@ -230,7 +230,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                                 color: const Color.fromRGBO(43, 90, 92, 1.000)),
                           ),
                         ),
-                        
+
                         CustomElevatedButton(
                           onPressed: () {
                             if (_textSize < 10) {
@@ -268,17 +268,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                                 _showSnackBar(context, 'Текст увеличен');
                               }
                             }),
-                        // ElevatedButton(
-                        //   onPressed: () {
-                        //     if (_textSize > 24) {
-                        //       _showSnackBar(context, 'Максимальный размер');
-                        //     } else {
-                        //       _increaseTextSize();
-                        //       _showSnackBar(context, 'Текст увеличен');
-                        //     }
-                        //   },
-                        //   child: const Text('Увеличить текст'),
-                        // ),
+
                         const SizedBox(width: 20.0),
                         CustomElevatedButton(
                             label: 'Случайный текст',
@@ -287,7 +277,6 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                               _showSnackBar(
                                   context, 'Сгенерирован случайный текст');
                             }),
-                        //
 
                         const SizedBox(width: 20.0),
                         CustomElevatedButton(

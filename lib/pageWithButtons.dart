@@ -10,7 +10,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color.fromRGBO(220, 124, 72, 1.000),
+        scaffoldBackgroundColor: Color.fromARGB(255, 46, 46, 46),
+
         textTheme: const TextTheme(
             displaySmall: TextStyle(
                 color: Colors.black,
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
 }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  // appbar custom
+
   final Widget child;
   final double height;
 
@@ -45,11 +46,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Container(
         height: preferredSize.height,
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          ),
-          color: Color.fromRGBO(252, 204, 140, 1.000),
+          // borderRadius: BorderRadius.only(
+          //   bottomLeft: Radius.circular(20),
+          //   bottomRight: Radius.circular(20),
+          // ),
+          color: Color.fromRGBO(155, 155, 155, 1),
         ),
         child: child);
   }
@@ -99,7 +100,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
       style: ElevatedButton.styleFrom(
           fixedSize: const Size(180, 40),
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-          backgroundColor: Color.fromRGBO(94, 147, 156, 1.000),
+          backgroundColor: Color.fromARGB(255, 129, 133, 134),
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
       onPressed: widget.onPressed,
       child: Text(widget.label),
@@ -115,8 +116,8 @@ class NewWidgetLay extends StatefulWidget {
 }
 
 class _NewWidgetLayState extends State<NewWidgetLay> {
-  double _textSize = 16.0; // Начальный размер текста
-  String _displayText = 'Пример текста'; // Начальный текст
+  double _textSize = 16.0; 
+  String _displayText = 'Пример текста'; 
 
   void _increaseTextSize() {
     setState(() {
@@ -126,26 +127,26 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
 
   void _decreaseTextSize() {
     setState(() {
-      _textSize -= 2.0; // Уменьшаем размер текста на 2.0 пункта
+      _textSize -= 2.0;
     });
   }
 
   void _resetTextSize() {
     setState(() {
-      _textSize = 16.0; // Сбрасываем размер текста до начального значения
+      _textSize = 16.0; 
     });
   }
 
   void _generateRandomText() {
     final faker = Faker();
     setState(() {
-      _displayText = faker.lorem.sentence(); // Генерируем случайный текст
+      _displayText = faker.lorem.sentence();
     });
   }
 
   void _nullText() {
     setState(() {
-      _displayText = ""; // Генерируем случайный текст
+      _displayText = ""; 
     });
   }
 
@@ -154,7 +155,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
       SnackBar(
         content: Text(message),
         duration: const Duration(
-            milliseconds: 400), // Длительность отображения подсказки
+            milliseconds: 400), 
       ),
     );
   }
@@ -165,17 +166,17 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        height: MediaQuery.of(context).size.height * 0.25,
+        height: MediaQuery.of(context).size.height * 0.15,
         child: Column(
           children: [
-            const FlutterLogo(size: 56),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.10,
+              height: MediaQuery.of(context).size.height * 0.15,
               width: MediaQuery.of(context).size.width * 0.90,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CircleAvatar(
-                    backgroundColor: Color.fromRGBO(43, 90, 92, 1.000),
+                    backgroundColor: Color.fromRGBO(114, 117, 117, 1),
                     child: IconButton(
                       color: Colors.white,
                       onPressed: () => Navigator.of(context).push(
@@ -200,8 +201,18 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                       icon: Icon(Icons.code),
                     ),
                   ),
-                  const SizedBox(
-                    width: 20,
+                  CircleAvatar(
+                    backgroundColor: Colors.black,
+                    child: IconButton(
+                      color: Colors.white,
+                      onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => const PageWithList())),
+                      splashColor: Colors.yellowAccent,
+                      splashRadius: 50,
+                      highlightColor: Colors.black,
+                      icon: Icon(Icons.code),
+                    ),
                   ),
                 ],
               ),
@@ -209,98 +220,75 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-              height: MediaQuery.of(context).size.height * 0.65,
-              child: ListView(
-                children: <Widget>[
-                  SingleChildScrollView(
-                    controller: _mycontroller,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          margin: const EdgeInsets.all(10),
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          child: Text(
-                            _displayText,
-                            style: TextStyle(
-                                fontSize: _textSize,
-                                color: const Color.fromRGBO(43, 90, 92, 1.000)),
-                          ),
-                        ),
-
-                        CustomElevatedButton(
-                          onPressed: () {
-                            if (_textSize < 10) {
-                              _showSnackBar(context, 'Минимальный размер');
-                            } else {
-                              _decreaseTextSize();
-                              _showSnackBar(context, 'Текст уменьшен');
-                            }
-                          },
-                          label: 'Уменьшить текст',
-                        ),
-                        const SizedBox(width: 20.0),
-                        CustomElevatedButton(
-                            label: 'Сбросить размер',
-                            onPressed: () {
-                              _resetTextSize();
-                              _showSnackBar(context, 'Размер сброшен');
-                            }),
-                        // ElevatedButton(
-                        //   onPressed: () {
-                        //     _resetTextSize();
-                        //     _showSnackBar(context, 'Размер сброшен');
-                        //   },
-                        //   child: const Text('Сбросить размер'),
-                        // ),
-
-                        const SizedBox(width: 20.0),
-                        CustomElevatedButton(
-                            label: 'Увеличить текст',
-                            onPressed: () {
-                              if (_textSize > 24) {
-                                _showSnackBar(context, 'Максимальный размер');
-                              } else {
-                                _increaseTextSize();
-                                _showSnackBar(context, 'Текст увеличен');
-                              }
-                            }),
-
-                        const SizedBox(width: 20.0),
-                        CustomElevatedButton(
-                            label: 'Случайный текст',
-                            onPressed: () {
-                              _generateRandomText();
-                              _showSnackBar(
-                                  context, 'Сгенерирован случайный текст');
-                            }),
-
-                        const SizedBox(width: 20.0),
-                        CustomElevatedButton(
-                            label: 'Сбросить текст',
-                            onPressed: () {
-                              _nullText();
-                              _showSnackBar(context, 'Текст сброшен');
-                            }),
-                      ],
+      body: Container(                                              //give me back my i9mage
+          // decoration: const BoxDecoration(
+          //   image: DecorationImage(
+          //       image: NetworkImage('https://i.imgur.com/tRqTIdl.gif'),
+          //       fit: BoxFit.cover),
+          // ),
+          height: MediaQuery.of(context).size.height * 0.85,
+          child: ListView(
+            children: <Widget>[
+              SingleChildScrollView(
+                controller: _mycontroller,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      
+                      height: MediaQuery.of(context).size.height * 0.10,
+                      child: Text(
+                        _displayText,
+                        style: TextStyle(
+                            fontSize: _textSize,
+                            color: Color.fromARGB(255, 230, 230, 230)),
+                      ),
                     ),
-                  ),
-                ],
-              )),
-          // Container(
-          //   height: 100,
-          //   width: 100,
-          //   color: Colors.black,
-          //   child: Text(
-          //     _displayText,
-          //     style: TextStyle(fontSize: _textSize, color: Colors.amber),
-          //   ),
-          // )
-        ],
-      ),
+                    CustomElevatedButton(
+                      onPressed: () {
+                        if (_textSize < 10) {
+                          _showSnackBar(context, 'Минимальный размер');
+                        } else {
+                          _decreaseTextSize();
+                          _showSnackBar(context, 'Текст уменьшен');
+                        }
+                      },
+                      label: 'Уменьшить текст',
+                    ),
+                    CustomElevatedButton(
+                        label: 'Сбросить размер',
+                        onPressed: () {
+                          _resetTextSize();
+                          _showSnackBar(context, 'Размер сброшен');
+                        }),
+                    CustomElevatedButton(
+                        label: 'Увеличить текст',
+                        onPressed: () {
+                          if (_textSize > 24) {
+                            _showSnackBar(context, 'Максимальный размер');
+                          } else {
+                            _increaseTextSize();
+                            _showSnackBar(context, 'Текст увеличен');
+                          }
+                        }),
+                    CustomElevatedButton(
+                        label: 'Случайный текст',
+                        onPressed: () {
+                          _generateRandomText();
+                          _showSnackBar(
+                              context, 'Сгенерирован случайный текст');
+                        }),
+                    CustomElevatedButton(
+                        label: 'Сбросить текст',
+                        onPressed: () {
+                          _nullText();
+                          _showSnackBar(context, 'Текст сброшен');
+                        }),
+                  ],
+                ),
+              ),
+            ],
+          )),
     );
   }
 }

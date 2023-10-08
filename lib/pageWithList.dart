@@ -1,95 +1,428 @@
+import 'dart:io';
+
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:flut_labs/pageWithButtons.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
-class ItemCard extends StatelessWidget {
+class PageWithList extends StatefulWidget {
+  const PageWithList({super.key});
+
+  @override
+  _PageWithListState createState() => _PageWithListState();
+}
+
+class Product {
+  final String name;
+  final double cost;
+  File? image;
+
+  Product({required this.name, required this.cost, this.image});
+}
+
+class _PageWithListState extends State<PageWithList> {
+  List<Product> _products = [];
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController numberController = TextEditingController();
+
+  // final List<String> names = <String>['Aby', 'Aish', 'Ayan', 'Ben', 'Bob'];
+  // final List<int> numbersa = <int>[2, 0, 10, 6, 52];
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2), // Длительность отображения подсказки
+      ),
+    );
+  }
+
+  void _addProductInList() {
+    setState(() {
+      _products.add(Product(
+          name: nameController.text,
+          cost: double.parse(numberController.text)));
+    });
+  }
+
+  
+
+  Future<void> _addImageForProduct(Product product) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      final imageFile = File(pickedFile.path);
+      setState(() {
+        product.image = imageFile;
+      });
+      _showSnackBar('Изображение добавлено для продукта: ${product.name}');
+    } else {
+      _showSnackBar('Изображение не выбрано');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 120,
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.symmetric(horizontal: 6),
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          spreadRadius: 1,
-          blurRadius: 1,
-          offset: Offset(0, 1), // changes position of shadow
-        ),
-      ], borderRadius: BorderRadius.circular(10), color: Colors.white),
-      child: Column(
-        children: [
-          Image.network(
-            'https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/1502591/cabbage-clipart-md.png',
-            height: 100,
-          ),
-          const Align(
-            child: Text(
-              "Cabbages",
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: const Text('Управление текстом и изображениями'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(height: 20.0),
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Name',
+              ),
             ),
-            alignment: Alignment.centerLeft,
-          ),
-          SizedBox(
-            height: 4,
-          ),
-          const Row(
-            children: [
-              Text("\$5.5",
-                  style: TextStyle(fontSize: 12, color: Colors.amber)),
-              SizedBox(
-                width: 4,
+            const SizedBox(height: 20.0),
+            TextField(
+              controller: numberController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Number',
               ),
-              Expanded(
-                child: Text(
-                  "per piece",
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 10, color: Colors.amber),
-                ),
+            ),
+            const SizedBox(height: 20.0),
+            ElevatedButton(
+                onPressed: () {
+                  _addProductInList();
+                },
+                child: const Text('Add')),
+            const SizedBox(height: 20.0),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _products.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final product = _products[index];
+                  return ListTile(
+                    title: Text(product.name),
+                    subtitle: Text('cost: ${product.cost.toString()}'),
+                    trailing: GestureDetector(
+                      onTap: () {
+                        _addImageForProduct(product);
+                      },
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: product.image != null
+                            ? FileImage(product.image!)
+                            : null,
+                      ),
+                    ),
+                  );
+                },
               ),
-            ],
-          )
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class PageWithList extends StatelessWidget {
-  const PageWithList({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final titles = [
-      'bike',
-      'boat',
-      'bus',
-      'car',
-      'railway',
-      'run',
-      'subway',
-      'transit',
-      'car',
-      'railway',
-      'run',
-      'subway',
-      'transit',
-      'walk'
-    ];
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 144, 146, 144),
-        title: const Text('New Screen'),
-      ),
-      body: ListView.builder(
-        itemBuilder: (context, index) => ItemCard(
-          
-        ),
-        itemCount: titles.length,
-        scrollDirection: Axis.horizontal,
-      ),
-      // ListView.builder(
+
+
+
+
+
+
+
+
+// class ItemCard extends StatefulWidget {
+//   const ItemCard({super.key});
+
+//   @override
+//   State<ItemCard> createState() => _ItemCardState();
+// }
+
+// class _ItemCardState extends State<ItemCard> {
+//   List<File> selectedImages = [];
+//   final picker = ImagePicker();
+
+//   Future getImages() async {
+//     final pickedFile = await picker.pickMultiImage(
+//         requestFullMetadata: true,
+//         imageQuality: 100,
+//         maxHeight: 1000,
+//         maxWidth: 1000);
+//     List<XFile> xfilePick = pickedFile;
+
+//     setState(
+//       () {
+//         if (xfilePick.isNotEmpty) {
+//           for (var i = 0; i < xfilePick.length; i++) {
+//             selectedImages.add(File(xfilePick[i].path));
+//           }
+//         } else {
+//           ScaffoldMessenger.of(context).showSnackBar(// is this context <<<
+//               const SnackBar(content: Text('Nothing is selected')));
+//         }
+//       },
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: 120,
+//       height: MediaQuery.of(context).size.height * 0.8,
+//       padding: const EdgeInsets.all(10),
+//       margin: const EdgeInsets.symmetric(horizontal: 6),
+//       decoration: BoxDecoration(boxShadow: [
+//         BoxShadow(
+//           color: Colors.grey.withOpacity(0.5),
+//           spreadRadius: 1,
+//           blurRadius: 1,
+//           offset: Offset(0, 1), // changes position of shadow
+//         ),
+//       ], borderRadius: BorderRadius.circular(10), color: Colors.white),
+//       child: Column(
+//         children: [
+//           Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               const SizedBox(
+//                 height: 20,
+//               ),
+//               ElevatedButton(
+//                 style: ButtonStyle(
+//                     backgroundColor: MaterialStateProperty.all(Colors.green)),
+//                 child: const Text('Select File Image'),
+//                 onPressed: () {
+//                   getImages();
+//                 },
+//               ),
+//               const Padding(
+//                 padding: EdgeInsets.symmetric(vertical: 18.0),
+//                 child: Text(
+//                   "GFG",
+//                   textScaleFactor: 3,
+//                   style: TextStyle(color: Colors.green),
+//                 ),
+//               ),
+//               Expanded(
+//                 child: SizedBox(
+//                   width: 300.0,
+//                   child: selectedImages.isEmpty
+//                       ? const Center(child: Text('Sorry nothing selected!!'))
+//                       : GridView.builder(
+//                           itemCount: selectedImages.length,
+//                           gridDelegate:
+//                               const SliverGridDelegateWithFixedCrossAxisCount(
+//                                   crossAxisCount: 3),
+//                           itemBuilder: (BuildContext context, int index) {
+//                             return Center(
+//                                 child: kIsWeb
+//                                     ? Image.network(
+//                                         selectedImages[index].path,
+//                                         height: 100,
+//                                         width: 100,
+//                                         fit: BoxFit.fill,
+//                                         alignment: Alignment.center,
+//                                       )
+//                                     : Image.file(
+//                                         selectedImages[index],
+//                                         height: 100,
+//                                         width: 100,
+//                                         fit: BoxFit.fill,
+//                                         alignment: Alignment.center,
+//                                       ));
+//                           },
+//                         ),
+//                 ),
+//               ),
+//             ],
+//           ),
+//           // Image.network(
+//           //   'https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/1502591/cabbage-clipart-md.png',
+//           //   height: 100,
+//           // ),
+//           const Align(
+//             child: Text(
+//               "Cabbages",
+//               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+//               maxLines: 1,
+//               overflow: TextOverflow.ellipsis,
+//             ),
+//             alignment: Alignment.centerLeft,
+//           ),
+//           SizedBox(
+//             height: 4,
+//           ),
+//           const Row(
+//             children: [
+//               Text("\$5.5",
+//                   style: TextStyle(fontSize: 12, color: Colors.amber)),
+//               SizedBox(
+//                 width: 4,
+//               ),
+//               Expanded(
+//                 child: Text(
+//                   "per piece",
+//                   overflow: TextOverflow.ellipsis,
+//                   style: TextStyle(fontSize: 10, color: Colors.amber),
+//                 ),
+//               ),
+//             ],
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// class PageWithList extends StatelessWidget {
+//   const PageWithList({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final titles = [
+//       'bike',
+//       'boat',
+//       'bus',
+//       'car',
+//       'railway',
+//       'run',
+//       'subway',
+//       'transit',
+//       'car',
+//       'railway',
+//       'run',
+//       'subway',
+//       'transit',
+//       'walk'
+//     ];
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: const Color.fromARGB(255, 144, 146, 144),
+//         title: const Text('New Screen'),
+//       ),
+//       body: ListView.builder(
+//         itemBuilder: (context, index) => ItemCard(),
+//         itemCount: titles.length,
+//         scrollDirection: Axis.vertical,
+//       ),
+//     );
+//   }
+// }
+
+// class MultipleImageSelector extends StatefulWidget {
+//   const MultipleImageSelector({super.key});
+
+//   @override
+//   State<MultipleImageSelector> createState() => _MultipleImageSelectorState();
+// }
+
+// class _MultipleImageSelectorState extends State<MultipleImageSelector> {
+//   List<File> selectedImages = [];
+//   final picker = ImagePicker();
+//   @override
+//   Widget build(BuildContext context) {
+//     // display image selected from gallery
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('File image select'),
+//         backgroundColor: Colors.green,
+//         actions: const [],
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             const SizedBox(
+//               height: 20,
+//             ),
+//             ElevatedButton(
+//               style: ButtonStyle(
+//                   backgroundColor: MaterialStateProperty.all(Colors.green)),
+//               child: const Text('Select File Image'),
+//               onPressed: () {
+//                 getImages();
+//               },
+//             ),
+//             const Padding(
+//               padding: EdgeInsets.symmetric(vertical: 18.0),
+//               child: Text(
+//                 "GFG",
+//                 textScaleFactor: 3,
+//                 style: TextStyle(color: Colors.green),
+//               ),
+//             ),
+//             Expanded(
+//               child: SizedBox(
+//                 width: 300.0,
+//                 child: selectedImages.isEmpty
+//                     ? const Center(child: Text('Sorry nothing selected!!'))
+//                     : GridView.builder(
+//                         itemCount: selectedImages.length,
+//                         gridDelegate:
+//                             const SliverGridDelegateWithFixedCrossAxisCount(
+//                                 crossAxisCount: 3),
+//                         itemBuilder: (BuildContext context, int index) {
+//                           return Center(
+//                               child: kIsWeb
+//                                   ? Image.network(
+//                                       selectedImages[index].path,
+//                                       height: 100,
+//                                       width: 100,
+//                                       fit: BoxFit.fill,
+//                                       alignment: Alignment.center,
+//                                     )
+//                                   : Image.file(
+//                                       selectedImages[index],
+//                                       height: 100,
+//                                       width: 100,
+//                                       fit: BoxFit.fill,
+//                                       alignment: Alignment.center,
+//                                     ));
+//                         },
+//                       ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+
+//   Future getImages() async {
+//     final pickedFile = await picker.pickMultiImage(
+//         requestFullMetadata: true,
+//         imageQuality: 100,
+//         maxHeight: 1000,
+//         maxWidth: 1000);
+//     List<XFile> xfilePick = pickedFile;
+
+//     setState(
+//       () {
+//         if (xfilePick.isNotEmpty) {
+//           for (var i = 0; i < xfilePick.length; i++) {
+//             selectedImages.add(File(xfilePick[i].path));
+//           }
+//         } else {
+//           ScaffoldMessenger.of(context).showSnackBar(// is this context <<<
+//               const SnackBar(content: Text('Nothing is selected')));
+//         }
+//       },
+//     );
+//   }
+// }
+
+
+// ListView.builder(
       //     itemCount: titles.length,
       //     itemBuilder: (context, index) {
       //       return Card(
@@ -121,9 +454,10 @@ class PageWithList extends StatelessWidget {
       //         ),
       //       );
       //     }),
-    );
-  }
-}
+
+
+
+
 
 // return Card(
 //   child: ListTile(
@@ -151,3 +485,5 @@ class PageWithList extends StatelessWidget {
 //     );
 //   }
 // }
+
+

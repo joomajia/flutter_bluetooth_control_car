@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => const NewWidgetLay(),
-        '/pageWithList': (context) => const PageWithList(),
+        '/pageWithList': (context) => PageWithList(),
       },
     );
   }
@@ -55,6 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: child);
   }
 }
+
 
 // class AppBars extends AppBar {
 //   AppBars({super.key})
@@ -181,7 +182,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                       color: Colors.white,
                       onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const PageWithList())),
+                              builder: (context) =>  PageWithList())),
                       splashColor: Colors.yellowAccent,
                       splashRadius: 50,
                       highlightColor: Colors.black,
@@ -194,7 +195,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                       color: Colors.white,
                       onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const PageWithList())),
+                              builder: (context) =>  PageWithList())),
                       splashColor: Colors.yellowAccent,
                       splashRadius: 50,
                       highlightColor: Colors.black,
@@ -207,7 +208,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                       color: Colors.white,
                       onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const PageWithList())),
+                              builder: (context) =>  PageWithList())),
                       splashColor: Colors.yellowAccent,
                       splashRadius: 50,
                       highlightColor: Colors.black,

@@ -70,6 +70,7 @@ class _PageWithListState extends State<PageWithList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.amber,
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,
         appBar: CustomAppBar(
@@ -96,7 +97,7 @@ class _PageWithListState extends State<PageWithList> {
                       ),
                     ),
                     CircleAvatar(
-                      backgroundColor: Colors.black,
+                      backgroundColor: const Color.fromARGB(255, 166, 22, 22),
                       child: IconButton(
                         color: Colors.white,
                         onPressed: () => Navigator.of(context).push(
@@ -127,200 +128,204 @@ class _PageWithListState extends State<PageWithList> {
             ],
           ),
         ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.85,
-          child: Column(children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.10,
-              width: MediaQuery.of(context).size.width * 0.90,
-              child: TextField(
-                controller: nameController,
-                style:
-                    const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                decoration: InputDecoration(
-                  hintStyle: const TextStyle(
-                      color: Color.fromARGB(255, 156, 155, 155)),
-                  hintText: 'Введите имя',
-                  labelStyle: const TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255)),
-                  labelText: 'Имя',
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                        color: Color.fromRGBO(148, 148, 148, 1), width: 3),
+        body: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              color: Color.fromRGBO(168, 167, 167, 1),
+              height: MediaQuery.of(context).size.height * 0.30,
+              width: MediaQuery.of(context).size.width * 1,
+              child: Column(
+                children: [
+                  TextField(
+                    controller: nameController,
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255)),
+                    decoration: InputDecoration(
+                      hintStyle: const TextStyle(
+                          color: Color.fromARGB(255, 156, 155, 155)),
+                      hintText: 'Введите имя',
+                      labelStyle: const TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255)),
+                      labelText: 'Имя',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                            color: Color.fromRGBO(148, 148, 148, 1), width: 3),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                            color: Color.fromRGBO(255, 255, 255, 1), width: 3),
+                      ),
+                    ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                        color: Color.fromRGBO(255, 255, 255, 1), width: 3),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
                   ),
-                ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: numberController,
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 255, 255, 255)),
+                    decoration: InputDecoration(
+                      hintStyle: const TextStyle(
+                          color: Color.fromARGB(255, 156, 155, 155)),
+                      hintText: 'Введите число',
+                      labelStyle: const TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255)),
+                      labelText: 'Число',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                            color: Color.fromRGBO(148, 148, 148, 1), width: 3),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                            color: Color.fromRGBO(255, 255, 255, 1), width: 3),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  CustomElevatedButton(
+                    onPressed: () {
+                      _addProductInList();
+                    },
+                    label: 'Добавить',
+                  ),
+                ],
               ),
             ),
+
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.10,
-              width: MediaQuery.of(context).size.width * 0.90,
-              child: TextField(
-                keyboardType: TextInputType.number,
-                controller: numberController,
-                style:
-                    const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                decoration: InputDecoration(
-                  hintStyle: const TextStyle(
-                      color: Color.fromARGB(255, 156, 155, 155)),
-                  hintText: 'Введите число',
-                  labelStyle: const TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255)),
-                  labelText: 'Число',
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                        color: Color.fromRGBO(148, 148, 148, 1), width: 3),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                        color: Color.fromRGBO(255, 255, 255, 1), width: 3),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.06,
-              child: CustomElevatedButton(
-                onPressed: () {
-                  _addProductInList();
-                },
-                label: 'Добавить',
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.04,
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.53,
+              height: MediaQuery.of(context).size.height * 0.55,
+              width: MediaQuery.of(context).size.width * 0.95,
               child: ListView.builder(
                   itemCount: _products.length,
                   itemBuilder: (BuildContext context, int index) {
                     final product = _products[index];
-                    return ListTile(
-                      title: Text(product.name),
-                      subtitle: Text('cost: ${product.cost.toString()}'),
-                      trailing: GestureDetector(
-                        onTap: () {
-                          _addImageForProduct(product);
-                        },
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundImage: product.image != null
-                              ? FileImage(product.image!)
-                              : null,
-                        ),
+                    return Container(
+                      color: Colors.black26,
+                      margin: EdgeInsets.all(10),
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      child: ListTile(
+                        textColor: Color.fromRGBO(57, 57, 57, 1),
+                        tileColor: Color(0xFFFBFBFB),
+                        title: Text(product.name),
+                        subtitle: Text('cost: ${product.cost.toString()}'),
+                        trailing: GestureDetector(
+                            onTap: () {
+                              _addImageForProduct(product);
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: const Color.fromARGB(255, 47, 47, 47),
+                              radius: 20,
+                              backgroundImage: product.image != null
+                                  ? FileImage(product.image!)
+                                  : null,
+                              child: product.image == null
+                                  ? Icon(Icons
+                                      .image) 
+                                  : null,
+                            )),
                       ),
                     );
                   }),
             )
-          ]),
+
+            //),
+          ],
         ));
   }
 }
 
-        // Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: <Widget>[
+// Column(
+//   mainAxisAlignment: MainAxisAlignment.center,
+//   children: <Widget>[
 
-        //     SizedBox(
-        //       child: Column(children: [
-        //         SizedBox(
-        //           //width: MediaQuery.of(context).size.width * 0.8,
-        //           child: TextField(
-        //             controller: nameController,
-        //             decoration: InputDecoration(
-        //               labelText: 'Name',
-        //               enabledBorder: OutlineInputBorder(
-        //                 borderRadius: BorderRadius.circular(16),
-        //                 borderSide: BorderSide(color: Colors.black, width: 3),
-        //               ),
-        //               focusedBorder: OutlineInputBorder(
-        //                 borderRadius: BorderRadius.circular(16),
-        //                 borderSide: BorderSide(
-        //                     color: Color.fromRGBO(106, 107, 106, 1), width: 3),
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //         const SizedBox(height: 20.0),
-        //         SizedBox(
-        //           //width: MediaQuery.of(context).size.width * 0.8,
-        //           child: TextField(
-        //             keyboardType: TextInputType.number,
-        //             controller: numberController,
-        //             decoration: InputDecoration(
-        //               labelText: 'Number',
-        //               enabledBorder: OutlineInputBorder(
-        //                 borderRadius: BorderRadius.circular(16),
-        //                 borderSide: BorderSide(color: Colors.black, width: 3),
-        //               ),
-        //               focusedBorder: OutlineInputBorder(
-        //                 borderRadius: BorderRadius.circular(16),
-        //                 borderSide: BorderSide(
-        //                     color: Color.fromRGBO(106, 107, 106, 1), width: 3),
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //         CustomElevatedButton(
-        //           onPressed: () {
-        //             _addProductInList();
-        //           },
-        //           label: 'Добавить',
-        //         ),
-        //       ]),
-        //     ),
-        //     SizedBox(
-        //       width: MediaQuery.of(context).size.width * 0.9,
-        //       height: MediaQuery.of(context).size.height * 0.5,
-        //       child: ListView.builder(
-        //         itemCount: _products.length,
-        //         itemBuilder: (BuildContext context, int index) {
-        //           final product = _products[index];
-        //           return SizedBox(
-        //             //width: MediaQuery.of(context).size.width * 0.9,
-        //             // height: 300,
-        //             child: ListTile(
-        //               title: Text(product.name),
-        //               subtitle: Text('cost: ${product.cost.toString()}'),
-        //               trailing: GestureDetector(
-        //                 onTap: () {
-        //                   _addImageForProduct(product);
-        //                 },
-        //                 child: CircleAvatar(
-        //                   radius: 20,
-        //                   backgroundImage: product.image != null
-        //                       ? FileImage(product.image!)
-        //                       : null,
-        //                 ),
-        //               ),
-        //             ),
-        //           );
-        //         },
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        //);
- 
-
-
-
-
-
-
-
-
+//     SizedBox(
+//       child: Column(children: [
+//         SizedBox(
+//           //width: MediaQuery.of(context).size.width * 0.8,
+//           child: TextField(
+//             controller: nameController,
+//             decoration: InputDecoration(
+//               labelText: 'Name',
+//               enabledBorder: OutlineInputBorder(
+//                 borderRadius: BorderRadius.circular(16),
+//                 borderSide: BorderSide(color: Colors.black, width: 3),
+//               ),
+//               focusedBorder: OutlineInputBorder(
+//                 borderRadius: BorderRadius.circular(16),
+//                 borderSide: BorderSide(
+//                     color: Color.fromRGBO(106, 107, 106, 1), width: 3),
+//               ),
+//             ),
+//           ),
+//         ),
+//         const SizedBox(height: 20.0),
+//         SizedBox(
+//           //width: MediaQuery.of(context).size.width * 0.8,
+//           child: TextField(
+//             keyboardType: TextInputType.number,
+//             controller: numberController,
+//             decoration: InputDecoration(
+//               labelText: 'Number',
+//               enabledBorder: OutlineInputBorder(
+//                 borderRadius: BorderRadius.circular(16),
+//                 borderSide: BorderSide(color: Colors.black, width: 3),
+//               ),
+//               focusedBorder: OutlineInputBorder(
+//                 borderRadius: BorderRadius.circular(16),
+//                 borderSide: BorderSide(
+//                     color: Color.fromRGBO(106, 107, 106, 1), width: 3),
+//               ),
+//             ),
+//           ),
+//         ),
+//         CustomElevatedButton(
+//           onPressed: () {
+//             _addProductInList();
+//           },
+//           label: 'Добавить',
+//         ),
+//       ]),
+//     ),
+//     SizedBox(
+//       width: MediaQuery.of(context).size.width * 0.9,
+//       height: MediaQuery.of(context).size.height * 0.5,
+//       child: ListView.builder(
+//         itemCount: _products.length,
+//         itemBuilder: (BuildContext context, int index) {
+//           final product = _products[index];
+//           return SizedBox(
+//             //width: MediaQuery.of(context).size.width * 0.9,
+//             // height: 300,
+//             child: ListTile(
+//               title: Text(product.name),
+//               subtitle: Text('cost: ${product.cost.toString()}'),
+//               trailing: GestureDetector(
+//                 onTap: () {
+//                   _addImageForProduct(product);
+//                 },
+//                 child: CircleAvatar(
+//                   radius: 20,
+//                   backgroundImage: product.image != null
+//                       ? FileImage(product.image!)
+//                       : null,
+//                 ),
+//               ),
+//             ),
+//           );
+//         },
+//       ),
+//     ),
+//   ],
+// ),
+//);
 
 // class ItemCard extends StatefulWidget {
 //   const ItemCard({super.key});
@@ -602,43 +607,38 @@ class _PageWithListState extends State<PageWithList> {
 //   }
 // }
 
-
 // ListView.builder(
-      //     itemCount: titles.length,
-      //     itemBuilder: (context, index) {
-      //       return Card(
-      //         elevation: 4,
-      //         margin: EdgeInsets.all(10),
-      //         shape: RoundedRectangleBorder(
-      //             borderRadius: BorderRadius.circular(10)),
-      //         child: Container(
-      //           margin: EdgeInsets.all(40),
-      //           height: 100,
-      //           decoration: BoxDecoration(
-      //             borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
-      //             image: DecorationImage(
-      //               image: NetworkImage(
-      //                   'https://avatars.mds.yandex.net/i?id=249e36178b607ffd447f43b052d573280e59ce0b-10355097-images-thumbs&n=13'),
-      //               fit: BoxFit.cover,
-      //             ),
-      //           ),
-      //           child: ListTile(
-      //             leading: Image.network(
-      //                 'https://avatars.mds.yandex.net/i?id=249e36178b607ffd447f43b052d573280e59ce0b-10355097-images-thumbs&n=13'),
-      //             title: Text('Title', style: TextStyle(fontSize: 20)),
-      //             subtitle: Text('Subtitle', style: TextStyle(fontSize: 16)),
-      //             trailing: Icon(Icons.arrow_forward),
-      //             contentPadding:
-      //                 EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      //             dense: true,
-      //           ),
-      //         ),
-      //       );
-      //     }),
-
-
-
-
+//     itemCount: titles.length,
+//     itemBuilder: (context, index) {
+//       return Card(
+//         elevation: 4,
+//         margin: EdgeInsets.all(10),
+//         shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(10)),
+//         child: Container(
+//           margin: EdgeInsets.all(40),
+//           height: 100,
+//           decoration: BoxDecoration(
+//             borderRadius: new BorderRadius.all(new Radius.circular(10.0)),
+//             image: DecorationImage(
+//               image: NetworkImage(
+//                   'https://avatars.mds.yandex.net/i?id=249e36178b607ffd447f43b052d573280e59ce0b-10355097-images-thumbs&n=13'),
+//               fit: BoxFit.cover,
+//             ),
+//           ),
+//           child: ListTile(
+//             leading: Image.network(
+//                 'https://avatars.mds.yandex.net/i?id=249e36178b607ffd447f43b052d573280e59ce0b-10355097-images-thumbs&n=13'),
+//             title: Text('Title', style: TextStyle(fontSize: 20)),
+//             subtitle: Text('Subtitle', style: TextStyle(fontSize: 16)),
+//             trailing: Icon(Icons.arrow_forward),
+//             contentPadding:
+//                 EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+//             dense: true,
+//           ),
+//         ),
+//       );
+//     }),
 
 // return Card(
 //   child: ListTile(
@@ -666,5 +666,3 @@ class _PageWithListState extends State<PageWithList> {
 //     );
 //   }
 // }
-
-

@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Color.fromARGB(255, 46, 46, 46),
-
+        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color.fromRGBO(163, 163, 162, 1)),
         textTheme: const TextTheme(
             displaySmall: TextStyle(
                 color: Colors.black,
@@ -28,7 +28,6 @@ class MyApp extends StatelessWidget {
 }
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-
   final Widget child;
   final double height;
 
@@ -55,7 +54,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: child);
   }
 }
-
 
 // class AppBars extends AppBar {
 //   AppBars({super.key})
@@ -117,8 +115,8 @@ class NewWidgetLay extends StatefulWidget {
 }
 
 class _NewWidgetLayState extends State<NewWidgetLay> {
-  double _textSize = 16.0; 
-  String _displayText = 'Пример текста'; 
+  double _textSize = 16.0;
+  String _displayText = 'Пример текста';
 
   void _increaseTextSize() {
     setState(() {
@@ -134,7 +132,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
 
   void _resetTextSize() {
     setState(() {
-      _textSize = 16.0; 
+      _textSize = 16.0;
     });
   }
 
@@ -147,7 +145,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
 
   void _nullText() {
     setState(() {
-      _displayText = ""; 
+      _displayText = "";
     });
   }
 
@@ -155,8 +153,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        duration: const Duration(
-            milliseconds: 400), 
+        duration: const Duration(milliseconds: 400),
       ),
     );
   }
@@ -182,7 +179,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                       color: Colors.white,
                       onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) =>  PageWithList())),
+                              builder: (context) => PageWithList())),
                       splashColor: Colors.yellowAccent,
                       splashRadius: 50,
                       highlightColor: Colors.black,
@@ -195,7 +192,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                       color: Colors.white,
                       onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) =>  PageWithList())),
+                              builder: (context) => PageWithList())),
                       splashColor: Colors.yellowAccent,
                       splashRadius: 50,
                       highlightColor: Colors.black,
@@ -208,7 +205,7 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                       color: Colors.white,
                       onPressed: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) =>  PageWithList())),
+                              builder: (context) => PageWithList())),
                       splashColor: Colors.yellowAccent,
                       splashRadius: 50,
                       highlightColor: Colors.black,
@@ -221,7 +218,8 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
           ],
         ),
       ),
-      body: Container(                                              //give me back my i9mage
+      body: SizedBox(
+          //give me back my i9mage
           // decoration: const BoxDecoration(
           //   image: DecorationImage(
           //       image: NetworkImage('https://i.imgur.com/tRqTIdl.gif'),
@@ -236,7 +234,6 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                      
                       height: MediaQuery.of(context).size.height * 0.10,
                       child: Text(
                         _displayText,

@@ -38,7 +38,8 @@ class _PageWithListState extends State<PageWithList> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        duration: const Duration(seconds: 2), // Длительность отображения подсказки
+        duration:
+            const Duration(seconds: 2), // Длительность отображения подсказки
       ),
     );
   }
@@ -50,8 +51,6 @@ class _PageWithListState extends State<PageWithList> {
           cost: double.parse(numberController.text)));
     });
   }
-
-  
 
   Future<void> _addImageForProduct(Product product) async {
     final picker = ImagePicker();
@@ -71,67 +70,249 @@ class _PageWithListState extends State<PageWithList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: const Text('Управление текстом и изображениями'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(height: 20.0),
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Name',
+        resizeToAvoidBottomInset: false,
+        key: _scaffoldKey,
+        appBar: CustomAppBar(
+          height: MediaQuery.of(context).size.height * 0.15,
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.15,
+                width: MediaQuery.of(context).size.width * 0.90,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: const Color.fromRGBO(114, 117, 117, 1),
+                      child: IconButton(
+                        color: Colors.white,
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => PageWithList())),
+                        splashColor: Colors.yellowAccent,
+                        splashRadius: 50,
+                        highlightColor: Colors.black,
+                        icon: Icon(Icons.code),
+                      ),
+                    ),
+                    CircleAvatar(
+                      backgroundColor: Colors.black,
+                      child: IconButton(
+                        color: Colors.white,
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => PageWithList())),
+                        splashColor: Colors.yellowAccent,
+                        splashRadius: 50,
+                        highlightColor: Colors.black,
+                        icon: Icon(Icons.code),
+                      ),
+                    ),
+                    CircleAvatar(
+                      backgroundColor: Colors.black,
+                      child: IconButton(
+                        color: Colors.white,
+                        onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => PageWithList())),
+                        splashColor: Colors.yellowAccent,
+                        splashRadius: 50,
+                        highlightColor: Colors.black,
+                        icon: Icon(Icons.code),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        body: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.85,
+          child: Column(children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.10,
+              width: MediaQuery.of(context).size.width * 0.90,
+              child: TextField(
+                controller: nameController,
+                style:
+                    const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                decoration: InputDecoration(
+                  hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 156, 155, 155)),
+                  hintText: 'Введите имя',
+                  labelStyle: const TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255)),
+                  labelText: 'Имя',
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color.fromRGBO(148, 148, 148, 1), width: 3),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(255, 255, 255, 1), width: 3),
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: 20.0),
-            TextField(
-              controller: numberController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Number',
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.10,
+              width: MediaQuery.of(context).size.width * 0.90,
+              child: TextField(
+                keyboardType: TextInputType.number,
+                controller: numberController,
+                style:
+                    const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                decoration: InputDecoration(
+                  hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 156, 155, 155)),
+                  hintText: 'Введите число',
+                  labelStyle: const TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255)),
+                  labelText: 'Число',
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color.fromRGBO(148, 148, 148, 1), width: 3),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(255, 255, 255, 1), width: 3),
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.06,
+              child: CustomElevatedButton(
                 onPressed: () {
                   _addProductInList();
                 },
-                child: const Text('Add')),
-            const SizedBox(height: 20.0),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _products.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final product = _products[index];
-                  return ListTile(
-                    title: Text(product.name),
-                    subtitle: Text('cost: ${product.cost.toString()}'),
-                    trailing: GestureDetector(
-                      onTap: () {
-                        _addImageForProduct(product);
-                      },
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundImage: product.image != null
-                            ? FileImage(product.image!)
-                            : null,
-                      ),
-                    ),
-                  );
-                },
+                label: 'Добавить',
               ),
             ),
-          ],
-        ),
-      ),
-    );
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.04,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.53,
+              child: ListView.builder(
+                  itemCount: _products.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final product = _products[index];
+                    return ListTile(
+                      title: Text(product.name),
+                      subtitle: Text('cost: ${product.cost.toString()}'),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          _addImageForProduct(product);
+                        },
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundImage: product.image != null
+                              ? FileImage(product.image!)
+                              : null,
+                        ),
+                      ),
+                    );
+                  }),
+            )
+          ]),
+        ));
   }
 }
 
+        // Column(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: <Widget>[
+
+        //     SizedBox(
+        //       child: Column(children: [
+        //         SizedBox(
+        //           //width: MediaQuery.of(context).size.width * 0.8,
+        //           child: TextField(
+        //             controller: nameController,
+        //             decoration: InputDecoration(
+        //               labelText: 'Name',
+        //               enabledBorder: OutlineInputBorder(
+        //                 borderRadius: BorderRadius.circular(16),
+        //                 borderSide: BorderSide(color: Colors.black, width: 3),
+        //               ),
+        //               focusedBorder: OutlineInputBorder(
+        //                 borderRadius: BorderRadius.circular(16),
+        //                 borderSide: BorderSide(
+        //                     color: Color.fromRGBO(106, 107, 106, 1), width: 3),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //         const SizedBox(height: 20.0),
+        //         SizedBox(
+        //           //width: MediaQuery.of(context).size.width * 0.8,
+        //           child: TextField(
+        //             keyboardType: TextInputType.number,
+        //             controller: numberController,
+        //             decoration: InputDecoration(
+        //               labelText: 'Number',
+        //               enabledBorder: OutlineInputBorder(
+        //                 borderRadius: BorderRadius.circular(16),
+        //                 borderSide: BorderSide(color: Colors.black, width: 3),
+        //               ),
+        //               focusedBorder: OutlineInputBorder(
+        //                 borderRadius: BorderRadius.circular(16),
+        //                 borderSide: BorderSide(
+        //                     color: Color.fromRGBO(106, 107, 106, 1), width: 3),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //         CustomElevatedButton(
+        //           onPressed: () {
+        //             _addProductInList();
+        //           },
+        //           label: 'Добавить',
+        //         ),
+        //       ]),
+        //     ),
+        //     SizedBox(
+        //       width: MediaQuery.of(context).size.width * 0.9,
+        //       height: MediaQuery.of(context).size.height * 0.5,
+        //       child: ListView.builder(
+        //         itemCount: _products.length,
+        //         itemBuilder: (BuildContext context, int index) {
+        //           final product = _products[index];
+        //           return SizedBox(
+        //             //width: MediaQuery.of(context).size.width * 0.9,
+        //             // height: 300,
+        //             child: ListTile(
+        //               title: Text(product.name),
+        //               subtitle: Text('cost: ${product.cost.toString()}'),
+        //               trailing: GestureDetector(
+        //                 onTap: () {
+        //                   _addImageForProduct(product);
+        //                 },
+        //                 child: CircleAvatar(
+        //                   radius: 20,
+        //                   backgroundImage: product.image != null
+        //                       ? FileImage(product.image!)
+        //                       : null,
+        //                 ),
+        //               ),
+        //             ),
+        //           );
+        //         },
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        //);
+ 
 
 
 

@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:flut_labs/fileThemes.dart';
 import 'package:flut_labs/pageWithList.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Color.fromARGB(255, 46, 46, 46),
-        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Color.fromRGBO(163, 163, 162, 1)),
+        colorScheme: ColorScheme.fromSwatch()
+            .copyWith(secondary: Color.fromRGBO(163, 163, 162, 1)),
         textTheme: const TextTheme(
             displaySmall: TextStyle(
                 color: Colors.black,
@@ -43,13 +45,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+        alignment: Alignment.center,
         height: preferredSize.height,
-        decoration: const BoxDecoration(
-          // borderRadius: BorderRadius.only(
-          //   bottomLeft: Radius.circular(20),
-          //   bottomRight: Radius.circular(20),
-          // ),
-          color: Color.fromRGBO(155, 155, 155, 1),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+          color: themeColor,
         ),
         child: child);
   }
@@ -97,10 +97,11 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          fixedSize: const Size(180, 40),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-          backgroundColor: Color.fromARGB(255, 129, 133, 134),
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+          fixedSize: const Size(160, 40),
+          //padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+          backgroundColor: Color.fromRGBO(198, 156, 132, 1.000),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)))),
       onPressed: widget.onPressed,
       child: Text(widget.label),
     );
@@ -163,11 +164,14 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,///////////////////////////////////////////////////////////////
       appBar: CustomAppBar(
+        
         height: MediaQuery.of(context).size.height * 0.15,
         child: Column(
           children: [
             SizedBox(
+              
               height: MediaQuery.of(context).size.height * 0.15,
               width: MediaQuery.of(context).size.width * 0.90,
               child: Row(
@@ -218,13 +222,13 @@ class _NewWidgetLayState extends State<NewWidgetLay> {
           ],
         ),
       ),
-      body: SizedBox(
-          //give me back my i9mage
-          // decoration: const BoxDecoration(
-          //   image: DecorationImage(
-          //       image: NetworkImage('https://i.imgur.com/tRqTIdl.gif'),
-          //       fit: BoxFit.cover),
-          // ),
+      body: Container(
+          // give me back my i9mage
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage('https://i.imgur.com/tRqTIdl.gif'),
+                fit: BoxFit.cover),
+          ),
           height: MediaQuery.of(context).size.height * 0.85,
           child: ListView(
             children: <Widget>[

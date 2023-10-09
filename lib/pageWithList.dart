@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:faker/faker.dart';
+import 'package:flut_labs/fileThemes.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:flut_labs/pageWithButtons.dart';
@@ -24,6 +25,7 @@ class Product {
 }
 
 class _PageWithListState extends State<PageWithList> {
+  int? numberForDelete;
   List<Product> _products = [];
 
   TextEditingController nameController = TextEditingController();
@@ -52,6 +54,13 @@ class _PageWithListState extends State<PageWithList> {
     });
   }
 
+  void _deleteFromList() {
+    setState(() {
+      _products.removeAt(numberForDelete!);
+      //_products.removeWhere(Product(name: "ss", cost: double.parse(11)));
+    });
+  }
+
   Future<void> _addImageForProduct(Product product) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -70,7 +79,7 @@ class _PageWithListState extends State<PageWithList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.amber,
+        backgroundColor: Color.fromRGBO(196,148,124,1.000),
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,
         appBar: CustomAppBar(
@@ -131,8 +140,11 @@ class _PageWithListState extends State<PageWithList> {
         body: Column(
           children: [
             Container(
+              decoration: BoxDecoration(
+                  color: themeColor,
+                  borderRadius:
+                     BorderRadius.vertical(bottom: Radius.circular(20) )),
               padding: EdgeInsets.all(10),
-              color: Color.fromRGBO(168, 167, 167, 1),
               height: MediaQuery.of(context).size.height * 0.30,
               width: MediaQuery.of(context).size.width * 1,
               child: Column(
@@ -208,9 +220,9 @@ class _PageWithListState extends State<PageWithList> {
                   itemBuilder: (BuildContext context, int index) {
                     final product = _products[index];
                     return Container(
-                      color: Colors.black26,
+                      color: Color.fromRGBO(60, 60, 60, 1),
                       margin: EdgeInsets.all(10),
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      height: 100,
                       child: ListTile(
                         textColor: Color.fromRGBO(57, 57, 57, 1),
                         tileColor: Color(0xFFFBFBFB),
@@ -221,16 +233,44 @@ class _PageWithListState extends State<PageWithList> {
                               _addImageForProduct(product);
                             },
                             child: CircleAvatar(
-                              backgroundColor: const Color.fromARGB(255, 47, 47, 47),
+                              backgroundColor:
+                                  Color.fromRGBO(74,52,41,1.000),
                               radius: 20,
                               backgroundImage: product.image != null
                                   ? FileImage(product.image!)
                                   : null,
                               child: product.image == null
-                                  ? Icon(Icons
-                                      .image) 
+                                  ? Icon(Icons.image)
                                   : null,
                             )),
+                        onLongPress: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  title: const Text("Подтверждение"),
+                                  content: const Text("Удалить элемент?"),
+                                  actions: <Widget>[
+                                    CustomElevatedButton(
+                                      onPressed: () {
+                                        numberForDelete = index;
+                                        _deleteFromList();
+                                        Navigator.of(context).pop(true);
+                                      },
+                                      label: 'Удалить',
+                                    ),
+                                    CustomElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(false);
+                                      },
+                                      label: 'Назад',
+                                    ),
+                                  ],
+                                );
+                              });
+                        },
                       ),
                     );
                   }),

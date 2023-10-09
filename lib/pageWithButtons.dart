@@ -48,7 +48,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         alignment: Alignment.center,
         height: preferredSize.height,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+          //borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
           color: themeColor,
         ),
         child: child);

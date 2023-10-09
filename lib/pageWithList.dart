@@ -1,13 +1,46 @@
 import 'dart:io';
-
-import 'package:faker/faker.dart';
+import 'package:flut_labs/EditProductScreen.dart';
 import 'package:flut_labs/fileThemes.dart';
 import 'package:flutter/material.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:flut_labs/pageWithButtons.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+class CustomAppBars extends StatelessWidget implements PreferredSizeWidget {
+  final Widget child;
+  final String title;
+  final Color backgroundColor;
+  final Color textColor;
+  final double height;
+  final double bottomLeftRadius;
+  final double bottomRightRadius;
+
+  const CustomAppBars({
+    required this.child,
+    super.key,
+    required this.title,
+    required this.backgroundColor,
+    required this.textColor,
+    required this.height,
+    required this.bottomLeftRadius,
+    required this.bottomRightRadius,
+  });
+  @override
+  Size get preferredSize => Size.fromHeight(height);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: child,
+        alignment: Alignment.center,
+        height: MediaQuery.of(context).size.height * 0.5,
+        decoration: BoxDecoration(
+          color: themeColor,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(bottomLeftRadius),
+            bottomRight: Radius.circular(bottomRightRadius),
+          ),
+        ));
+  }
+}
 
 class PageWithList extends StatefulWidget {
   const PageWithList({super.key});
@@ -17,8 +50,8 @@ class PageWithList extends StatefulWidget {
 }
 
 class Product {
-  final String name;
-  final double cost;
+  String name;
+  double cost;
   File? image;
 
   Product({required this.name, required this.cost, this.image});
@@ -61,6 +94,76 @@ class _PageWithListState extends State<PageWithList> {
     });
   }
 
+  void _viewCardContent(Product product) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(product.name),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (product.image != null)
+                Image.file(
+                    product.image!), // Отображение изображения, если оно есть
+              SizedBox(height: 16.0),
+              Text('Стоимость: ${product.cost.toString()}'),
+              SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      // Открываем экран редактирования продукта
+                      Navigator.of(context).pop();
+                      Navigator.of(context)
+                          .push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EditProductScreen(product: product),
+                        ),
+                      )
+                          .then((editedProduct) {
+                        if (editedProduct != null) {
+                          // Продукт был отредактирован, обновляем его в списке
+                          setState(() {
+                            _products[_products.indexOf(product)] =
+                                editedProduct;
+                          });
+                          _showSnackBar('Продукт отредактирован');
+                        }
+                      });
+                    },
+                    child: Text('Редактировать'),
+                  ),
+                  SizedBox(width: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Удаление карточки (ваша логика удаления)
+                      _products.remove(product);
+                      setState(() {});
+                      Navigator.of(context).pop();
+                      _showSnackBar('Карточка удалена');
+                    },
+                    child: Text('Удалить'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Закрыть'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _addImageForProduct(Product product) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -79,152 +182,157 @@ class _PageWithListState extends State<PageWithList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromRGBO(196,148,124,1.000),
+        backgroundColor: Color.fromRGBO(196, 148, 124, 1.000),
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,
-        appBar: CustomAppBar(
-          height: MediaQuery.of(context).size.height * 0.15,
-          child: Column(
+        appBar: CustomAppBars(
+          child: Container(
+              child: Column(
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.15,
-                width: MediaQuery.of(context).size.width * 0.90,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: const Color.fromRGBO(114, 117, 117, 1),
-                      child: IconButton(
-                        color: Colors.white,
-                        onPressed: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => PageWithList())),
-                        splashColor: Colors.yellowAccent,
-                        splashRadius: 50,
-                        highlightColor: Colors.black,
-                        icon: Icon(Icons.code),
-                      ),
-                    ),
-                    CircleAvatar(
-                      backgroundColor: const Color.fromARGB(255, 166, 22, 22),
-                      child: IconButton(
-                        color: Colors.white,
-                        onPressed: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => PageWithList())),
-                        splashColor: Colors.yellowAccent,
-                        splashRadius: 50,
-                        highlightColor: Colors.black,
-                        icon: Icon(Icons.code),
-                      ),
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.black,
-                      child: IconButton(
-                        color: Colors.white,
-                        onPressed: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => PageWithList())),
-                        splashColor: Colors.yellowAccent,
-                        splashRadius: 50,
-                        highlightColor: Colors.black,
-                        icon: Icon(Icons.code),
-                      ),
-                    ),
-                  ],
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+              TextField(
+                controller: nameController,
+                style:
+                    const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                decoration: InputDecoration(
+                  hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 156, 155, 155)),
+                  hintText: 'Введите имя',
+                  labelStyle: const TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255)),
+                  labelText: 'Имя',
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color.fromRGBO(148, 148, 148, 1), width: 3),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(255, 255, 255, 1), width: 3),
+                  ),
                 ),
               ),
-            ],
-          ),
-        ),
-        body: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: themeColor,
-                  borderRadius:
-                     BorderRadius.vertical(bottom: Radius.circular(20) )),
-              padding: EdgeInsets.all(10),
-              height: MediaQuery.of(context).size.height * 0.30,
-              width: MediaQuery.of(context).size.width * 1,
-              child: Column(
-                children: [
-                  TextField(
-                    controller: nameController,
-                    style: const TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255)),
-                    decoration: InputDecoration(
-                      hintStyle: const TextStyle(
-                          color: Color.fromARGB(255, 156, 155, 155)),
-                      hintText: 'Введите имя',
-                      labelStyle: const TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255)),
-                      labelText: 'Имя',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: BorderSide(
-                            color: Color.fromRGBO(148, 148, 148, 1), width: 3),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                            color: Color.fromRGBO(255, 255, 255, 1), width: 3),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    controller: numberController,
-                    style: const TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255)),
-                    decoration: InputDecoration(
-                      hintStyle: const TextStyle(
-                          color: Color.fromARGB(255, 156, 155, 155)),
-                      hintText: 'Введите число',
-                      labelStyle: const TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255)),
-                      labelText: 'Число',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: BorderSide(
-                            color: Color.fromRGBO(148, 148, 148, 1), width: 3),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                            color: Color.fromRGBO(255, 255, 255, 1), width: 3),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  CustomElevatedButton(
-                    onPressed: () {
-                      _addProductInList();
-                    },
-                    label: 'Добавить',
-                  ),
-                ],
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
               ),
-            ),
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: numberController,
+                style:
+                    const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                decoration: InputDecoration(
+                  hintStyle: const TextStyle(
+                      color: Color.fromARGB(255, 156, 155, 155)),
+                  hintText: 'Введите число',
+                  labelStyle: const TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255)),
+                  labelText: 'Число',
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color.fromRGBO(148, 148, 148, 1), width: 3),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                        color: Color.fromRGBO(255, 255, 255, 1), width: 3),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              CustomElevatedButton(
+                onPressed: () {
+                  _addProductInList();
+                },
+                label: 'Добавить',
+              ),
+            ],
+          )),
+          title: 'Home',
+          backgroundColor: Color(0xff000132),
+          textColor: Colors.white,
+          height: 200.0,
+          bottomLeftRadius: 30,
+          bottomRightRadius: 30,
+        ),
+        // CustomAppBar(
+        //   height: MediaQuery.of(context).size.height * 0.35,
+        //   child: Container(
+        //     decoration: BoxDecoration(
+        //         color: Colors.amber,
+        //         borderRadius: BorderRadius.all(Radius.circular(20))),
+        //     child: Column(
+        //       children: [
+        //         SizedBox(
+        //           height: MediaQuery.of(context).size.height * 0.01,
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        // CircleAvatar(
+        //   backgroundColor: const Color.fromRGBO(114, 117, 117, 1),
+        //   child: IconButton(
+        //     color: Colors.white,
+        //     onPressed: () => Navigator.of(context).push(
+        //         MaterialPageRoute(
+        //             builder: (context) => PageWithList())),
+        //     splashColor: Colors.yellowAccent,
+        //     splashRadius: 50,
+        //     highlightColor: Colors.black,
+        //     icon: Icon(Icons.code),
+        //   ),
+        // ),
+        // CircleAvatar(
+        //   backgroundColor: const Color.fromARGB(255, 166, 22, 22),
+        //   child: IconButton(
+        //     color: Colors.white,
+        //     onPressed: () => Navigator.of(context).push(
+        //         MaterialPageRoute(
+        //             builder: (context) => PageWithList())),
+        //     splashColor: Colors.yellowAccent,
+        //     splashRadius: 50,
+        //     highlightColor: Colors.black,
+        //     icon: Icon(Icons.code),
+        //   ),
+        // ),
+        // CircleAvatar(
+        //   backgroundColor: Colors.black,
+        //   child: IconButton(
+        //     color: Colors.white,
+        //     onPressed: () => Navigator.of(context).push(
+        //         MaterialPageRoute(
+        //             builder: (context) => PageWithList())),
+        //     splashColor: Colors.yellowAccent,
+        //     splashRadius: 50,
+        //     highlightColor: Colors.black,
+        //     icon: Icon(Icons.code),
+        //   ),
+        // ),
 
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.55,
-              width: MediaQuery.of(context).size.width * 0.95,
-              child: ListView.builder(
-                  itemCount: _products.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final product = _products[index];
-                    return Container(
-                      color: Color.fromRGBO(60, 60, 60, 1),
-                      margin: EdgeInsets.all(10),
-                      height: 100,
+        body: SingleChildScrollView(
+            child: Expanded(
+          child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: _products.length,
+              itemBuilder: (BuildContext context, int index) {
+                final product = _products[index];
+                return Card(
+                  margin: EdgeInsets.all(8.0),
+                  child: InkWell(
+                    onTap: () {
+                      _viewCardContent(
+                          product); // Открываем содержимое карточки при нажатии
+                    },
+                    child: Container(
                       child: ListTile(
-                        textColor: Color.fromRGBO(57, 57, 57, 1),
+                        textColor: Color.fromRGBO(207, 180, 162, 1.000),
                         tileColor: Color(0xFFFBFBFB),
                         title: Text(product.name),
                         subtitle: Text('cost: ${product.cost.toString()}'),
@@ -234,7 +342,7 @@ class _PageWithListState extends State<PageWithList> {
                             },
                             child: CircleAvatar(
                               backgroundColor:
-                                  Color.fromRGBO(74,52,41,1.000),
+                                  Color.fromRGBO(74, 52, 41, 1.000),
                               radius: 20,
                               backgroundImage: product.image != null
                                   ? FileImage(product.image!)
@@ -243,42 +351,40 @@ class _PageWithListState extends State<PageWithList> {
                                   ? Icon(Icons.image)
                                   : null,
                             )),
-                        onLongPress: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  title: const Text("Подтверждение"),
-                                  content: const Text("Удалить элемент?"),
-                                  actions: <Widget>[
-                                    CustomElevatedButton(
-                                      onPressed: () {
-                                        numberForDelete = index;
-                                        _deleteFromList();
-                                        Navigator.of(context).pop(true);
-                                      },
-                                      label: 'Удалить',
-                                    ),
-                                    CustomElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop(false);
-                                      },
-                                      label: 'Назад',
-                                    ),
-                                  ],
-                                );
-                              });
-                        },
+                        // onLongPress: () {
+                        //   showDialog(
+                        //       context: context,
+                        //       builder: (BuildContext context) {
+                        //         return AlertDialog(
+                        //           shape: RoundedRectangleBorder(
+                        //               borderRadius: BorderRadius.circular(10)),
+                        //           title: const Text("Подтверждение"),
+                        //           content: const Text("Удалить элемент?"),
+                        //           actions: <Widget>[
+                        //             CustomElevatedButton(
+                        //               onPressed: () {
+                        //                 numberForDelete = index;
+                        //                 _deleteFromList();
+                        //                 Navigator.of(context).pop(true);
+                        //               },
+                        //               label: 'Удалить',
+                        //             ),
+                        //             CustomElevatedButton(
+                        //               onPressed: () {
+                        //                 Navigator.of(context).pop(false);
+                        //               },
+                        //               label: 'Назад',
+                        //             ),
+                        //           ],
+                        //         );
+                        //       });
+                        // },
                       ),
-                    );
-                  }),
-            )
-
-            //),
-          ],
-        ));
+                    ),
+                  ),
+                );
+              }),
+        )));
   }
 }
 

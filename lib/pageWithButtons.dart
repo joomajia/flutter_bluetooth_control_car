@@ -99,7 +99,7 @@ class _CustomElevatedButtonState extends State<CustomElevatedButton> {
       style: ElevatedButton.styleFrom(
           fixedSize: const Size(160, 40),
           //padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-          backgroundColor: Color.fromRGBO(198, 156, 132, 1.000),
+          backgroundColor: buttonColors,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)))),
       onPressed: widget.onPressed,

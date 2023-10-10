@@ -82,11 +82,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
             SizedBox(height: 20.0),
             ElevatedButton(
                 onPressed: () {
-                  _saveChanges;
+                  _saveChanges();
                 },
                 child: Text('svae')),
                 
-            // Отобразите выбранное изображение (если оно есть)
+            
             if (_editedImage != null) Image.file(_editedImage!, height: 200.0),
           ],
         ),

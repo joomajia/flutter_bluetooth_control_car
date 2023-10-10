@@ -22,7 +22,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void initState() {
     super.initState();
-    // Инициализируйте контроллеры значениями текущего продукта
     _nameController.text = widget.product.name;
     _costController.text = widget.product.cost.toString();
   }
@@ -35,16 +34,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _saveChanges() {
-    // Получите измененные значения из контроллеров
     final editedName = _nameController.text;
     final editedCost = double.tryParse(_costController.text) ?? 0.0;
 
-    // Обновите текущий продукт
     widget.product.name = editedName;
     widget.product.cost = editedCost;
     widget.product.image = _editedImage;
 
-    // Закройте экран редактирования и передайте измененный продукт обратно на предыдущий экран
     Navigator.of(context).pop(widget.product);
   }
 
@@ -69,11 +65,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
               decoration: InputDecoration(labelText: 'Стоимость'),
             ),
             SizedBox(height: 20.0),
-            // Добавьте возможность выбора изображения из галереи
+            
             ElevatedButton(
               onPressed: () async {
                 final picker = ImagePicker();
-                final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+                final pickedFile =
+                    await picker.pickImage(source: ImageSource.gallery);
                 if (pickedFile != null) {
                   setState(() {
                     _editedImage = File(pickedFile.path);
@@ -83,9 +80,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
               child: Text('Выбрать изображение'),
             ),
             SizedBox(height: 20.0),
+            ElevatedButton(
+                onPressed: () {
+                  _saveChanges;
+                },
+                child: Text('svae')),
+                
             // Отобразите выбранное изображение (если оно есть)
-            if (_editedImage != null)
-              Image.file(_editedImage!, height: 200.0),
+            if (_editedImage != null) Image.file(_editedImage!, height: 200.0),
           ],
         ),
       ),

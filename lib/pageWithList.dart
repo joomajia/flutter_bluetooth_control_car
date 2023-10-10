@@ -73,8 +73,7 @@ class _PageWithListState extends State<PageWithList> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        duration:
-            const Duration(seconds: 2), // Длительность отображения подсказки
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -94,75 +93,7 @@ class _PageWithListState extends State<PageWithList> {
     });
   }
 
-  void _viewCardContent(Product product) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(product.name),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (product.image != null)
-                Image.file(
-                    product.image!), // Отображение изображения, если оно есть
-              SizedBox(height: 16.0),
-              Text('Стоимость: ${product.cost.toString()}'),
-              SizedBox(height: 16.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      // Открываем экран редактирования продукта
-                      Navigator.of(context).pop();
-                      Navigator.of(context)
-                          .push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              EditProductScreen(product: product),
-                        ),
-                      )
-                          .then((editedProduct) {
-                        if (editedProduct != null) {
-                          // Продукт был отредактирован, обновляем его в списке
-                          setState(() {
-                            _products[_products.indexOf(product)] =
-                                editedProduct;
-                          });
-                          _showSnackBar('Продукт отредактирован');
-                        }
-                      });
-                    },
-                    child: Text('Редактировать'),
-                  ),
-                  SizedBox(width: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Удаление карточки (ваша логика удаления)
-                      _products.remove(product);
-                      setState(() {});
-                      Navigator.of(context).pop();
-                      _showSnackBar('Карточка удалена');
-                    },
-                    child: Text('Удалить'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Закрыть'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  void _viewCardContent(Product product) {}
 
   Future<void> _addImageForProduct(Product product) async {
     final picker = ImagePicker();
@@ -186,6 +117,12 @@ class _PageWithListState extends State<PageWithList> {
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,
         appBar: CustomAppBars(
+          title: 'Home',
+          backgroundColor: Color(0xff000132),
+          textColor: Colors.white,
+          height: 200.0,
+          bottomLeftRadius: 30,
+          bottomRightRadius: 30,
           child: Container(
               child: Column(
             children: [
@@ -253,12 +190,6 @@ class _PageWithListState extends State<PageWithList> {
               ),
             ],
           )),
-          title: 'Home',
-          backgroundColor: Color(0xff000132),
-          textColor: Colors.white,
-          height: 200.0,
-          bottomLeftRadius: 30,
-          bottomRightRadius: 30,
         ),
         // CustomAppBar(
         //   height: MediaQuery.of(context).size.height * 0.35,
@@ -316,7 +247,6 @@ class _PageWithListState extends State<PageWithList> {
         // ),
 
         body: SingleChildScrollView(
-            child: Expanded(
           child: ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -328,7 +258,7 @@ class _PageWithListState extends State<PageWithList> {
                   child: InkWell(
                     onTap: () {
                       _viewCardContent(
-                          product); // Открываем содержимое карточки при нажатии
+                          product); 
                     },
                     child: Container(
                       child: ListTile(
@@ -351,6 +281,85 @@ class _PageWithListState extends State<PageWithList> {
                                   ? Icon(Icons.image)
                                   : null,
                             )),
+                        onLongPress: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text(product.name),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (product.image != null)
+                                      Image.file(product.image!, height: 100,),
+                                    SizedBox(height: 16.0),
+                                    Text(
+                                        'Стоимость: ${product.cost.toString()}'),
+                                    SizedBox(height: 16.0),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context)
+                                                .push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditProductScreen(
+                                                        product: product),
+                                              ),
+                                            )
+                                                .then((editedProduct) {
+                                              if (editedProduct != null) {
+                                                setState(() {
+                                                  _products[_products.indexOf(
+                                                      product)] = editedProduct;
+                                                });
+                                                _showSnackBar(
+                                                    'Продукт отредактирован');
+                                              }
+                                            });
+                                          },
+                                          child: Text('Редактировать'),
+                                        ),
+                                        SizedBox(width: 16.0),
+                                        
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            numberForDelete = index;
+                                            _deleteFromList();
+
+                                            Navigator.of(context).pop();
+                                            _showSnackBar('Карточка удалена');
+                                          },
+                                          child: const Text('Удалить'),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Закрыть'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              }),
+        ));
+  }
+}
                         // onLongPress: () {
                         //   showDialog(
                         //       context: context,
@@ -379,14 +388,7 @@ class _PageWithListState extends State<PageWithList> {
                         //         );
                         //       });
                         // },
-                      ),
-                    ),
-                  ),
-                );
-              }),
-        )));
-  }
-}
+  
 
 // Column(
 //   mainAxisAlignment: MainAxisAlignment.center,

@@ -253,30 +253,7 @@ class _PageWithListState extends State<PageWithList> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
-              TextField(
-                keyboardType: TextInputType.number,
-                controller: numberController,
-                style:
-                    const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                decoration: InputDecoration(
-                  hintStyle: const TextStyle(
-                      color: Color.fromARGB(255, 156, 155, 155)),
-                  hintText: 'Введите число',
-                  labelStyle: const TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255)),
-                  labelText: 'Число',
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: BorderSide(
-                        color: Color.fromRGBO(148, 148, 148, 1), width: 3),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                        color: Color.fromRGBO(255, 255, 255, 1), width: 3),
-                  ),
-                ),
-              ),
+              TextFieldWidgetInput(numberController: numberController),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
@@ -332,6 +309,46 @@ class _PageWithListState extends State<PageWithList> {
         ));
   }
 }
+
+class TextFieldWidgetInput extends StatelessWidget {
+  const TextFieldWidgetInput({
+    super.key,
+    required this.numberController,
+  });
+
+  final TextEditingController numberController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      keyboardType: TextInputType.number,
+      controller: numberController,
+      style:
+          const TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+      decoration: InputDecoration(
+        hintStyle: const TextStyle(
+            color: Color.fromARGB(255, 156, 155, 155)),
+        hintText: 'Введите число',
+        labelStyle: const TextStyle(
+            color: Color.fromARGB(255, 255, 255, 255)),
+        labelText: 'Число',
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(
+              color: Color.fromRGBO(148, 148, 148, 1), width: 3),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+              color: Color.fromRGBO(255, 255, 255, 1), width: 3),
+        ),
+      ),
+    );
+  }
+}
+
+
+
                         // onLongPress: () {
                         //   showDialog(
                         //       context: context,
